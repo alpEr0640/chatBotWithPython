@@ -1,0 +1,27 @@
+from typing import Any
+from ctransformers import AutoModelForCausalLM
+from langchain.memory import ConversationBufferMemory
+import streamlit as st
+
+deneme = st.chat_input("say something")
+
+
+def predict(model_input: Any) -> Any:
+    prompt = model_input.get("prompt")
+    template = f"System: You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.\nUser: {prompt}\nAssistant: "
+    response = {}
+    response["response"] = llm(template, stop=["\nUser:"])
+    return response
+user_input = {
+   "prompt": deneme
+}
+
+if deneme:
+    st.write("you->" + deneme)
+    llm = AutoModelForCausalLM.from_pretrained("TheBloke/Llama-2-70B-Chat-GGML",
+                                               model_file='llama-2-70b-chat.ggmlv3.q4_0.bin',
+                                               model_type="llama")
+    response = predict(user_input)
+
+    st.text(response)
+
