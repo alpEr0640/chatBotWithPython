@@ -1,0 +1,47 @@
+from typing import Any
+from ctransformers import AutoModelForCausalLM
+from langchain.memory import ConversationBufferMemory
+import streamlit as st
+
+def predict(model_input: Any) -> Any:
+    prompt = model_input.get("prompt")
+    template = f"System: You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.\nUser: {prompt}\nAssistant: "
+    response = {}
+    response["response"] = llm(template, stop=["\nUser:"])
+    return response
+
+st.title("Chatbot Project")
+
+# Sohbet geçmişini saklamak için bir liste oluşturun
+chat_history = []
+
+# Sidebar'da sohbet geçmişini görüntülemek için bir st.sidebar bölmesi oluşturun
+sidebar = st.sidebar
+sidebar.title("Chat History")
+
+deneme = st.chat_input("say something")
+
+if  deneme:
+
+    st.write("you->" + deneme, height=200)
+
+    llm = AutoModelForCausalLM.from_pretrained("TheBloke/Llama-2-7B-Chat-GGML",
+                                                   model_file='llama-2-7b-chat.ggmlv3.q4_0.bin',
+                                                   model_type="llama")
+
+    user_input = {
+        "prompt": deneme
+    }
+
+    response = predict(user_input)
+
+        # Cevabı ekrana yazdırın ve sohbet geçmişine ekleyin
+    chat_history.append(f"you-> {deneme}\nbot-> {response['response']}")
+    st.write(response, height=200)
+
+        # Sidebar'da sohbet geçmişini güncelleyin
+    sidebar.text("\n".join(chat_history))
+
+        # Enter tuşuna basıldığında veya Gönder düğmesine tıklandığında beklemek için
+        # isteğe bağlı bir bekleme süresi ekleyebilirsiniz.
+    st.text("")  # Boş bir metin ekleyerek bekleme yapabilirsiniz.
