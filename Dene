@@ -1,0 +1,39 @@
+from flask import Flask, request, jsonify
+from ctransformers import AutoModelForCausalLM
+from langchain.memory import ConversationBufferMemory
+
+app = Flask(__name__)
+
+# Chatbot modelini yükleyin
+llm = AutoModelForCausalLM.from_pretrained("TheBloke/Llama-2-7B-Chat-GGML",
+                                           model_file='llama-2-7b-chat.ggmlv3.q4_0.bin',
+                                           model_type="llama")
+
+# Sohbet geçmişini saklamak için bir liste oluşturun
+chat_history = []
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    # Gelen JSON verisini alın
+    data = request.get_json()
+    user_input = data.get('user_input')
+    
+    # Sohbet geçmişi içeriğini oluşturun
+    template = f"System: You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.\nUser: {user_input}\nAssistant: "
+    
+    # Chatbot tahminini yapın
+    response = llm(template, stop=["\nUser:"])
+    
+    # Cevabı sohbet geçmişine ekleyin
+    chat_history.append(f"you-> {user_input}\nbot-> {response}")
+    
+    # Cevabı JSON olarak döndürün
+    return jsonify({"response": response})
+
+@app.route('/chat_history', methods=['GET'])
+def get_chat_history():
+    # Sohbet geçmişini JSON olarak döndürün
+    return jsonify({"chat_history": chat_history})
+
+if __name__ == '__main__':
+    app.run(debug=True)
