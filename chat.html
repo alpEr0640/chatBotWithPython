@@ -1,19 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+<style>
+   *{
+  margin: 0;
+  padding: 0;
+  box-sizing:border-box;
+  text-decoration:none;
+  list-style:none;
+}
+body{
+  font-family: 'Roboto', sans-serif;
+}
+.pencere{
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  border:5px solid #2980b9;
+  width:850px;
+  height:500px;
+}
+.ust{
+  padding:15px;
+  background-color:#2980b9;
+  color:white;
+}
+.icerik{
+  position: relative;
+  width:100%;
+  height:80%;
+  overflow:scroll;
+  overflow-x:hidden;
+  padding:15px;
+}
+.icerik::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+.icerik::-webkit-scrollbar-thumb
+{
+	background-color: #1abc9c;
+}
+.gonder {
+  height: 50px;
+  background-color: #2980b9;
+  line-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; /* Aralarındaki margin'i 10px olarak ayarladık */
+}
 
-    <title>Chatbot Projesi - Sohbet</title>
+input[type="text"] {
+  background-color: transparent;
+  outline: 0;
+  padding: 7px;
+  border: 0;
+  width: 60%; /* Örnek olarak %60 genişlik verdik, istediğiniz genişliği ayarlayabilirsiniz */
+  box-sizing: border-box;
+  color: white;
+}
+
+input[type="submit"] {
+  background-color: white;
+  outline: 0;
+  height: 40px;
+  padding: 7px;
+  border: 0;
+  width: auto; /* Genişliği otomatik ayarlanacak şekilde değiştirdik */
+  box-sizing: border-box;
+  color: #2980b9;
+  cursor: pointer;
+  border: 2px solid white;
+  transition: .4s;
+}
+
+input[type="submit"]:hover {
+  color: white;
+  background-color: #2980b9;
+}
+
+p{
+  padding:10px;
+  background-color:#EDEEF1;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color:#222;
+  border-radius:5px;
+  word-wrap: break-word;
+  line-height:25px;
+}
+h1{
+  position: absolute;
+  left: 43%;
+  top: 20px;
+}
+
+</style>
+
+<title>Chatbot Projesi</title>
+
 </head>
 <body>
-    <h1>Chatbot Projesi - Sohbet</h1>
-    <p>Siz: {{ user_input }}</p>
-    <p>Bot: {{ response }}</p>
-<form action="/">
-    <input type="submit" value="sohbete geri dön" >
-</form>
+
+<h1>Chatbot Projesi</h1>
+
+<div class="pencere">
+  <div class="ust">
+    Sohbet Kutusu
+  </div>
+  <div class="icerik" id="icerik">
+    <p>
+        <i class="fa-solid fa-user"></i> {{ user_input }}
+    </p>
+    <p>
+    <i class="fa-solid fa-robot"></i>  {{response}}
+    </p>
+  </div>
+  <div class="gonder">
+    <form method="post" action="/">
+      <input  type="submit" value="Sohbete Geri Dön " class="btnn">
+    </form>
+    <form method="post" action="/history">
+      <input  type="submit" value="Sohbete Geçmişi" class="btnn">
+    </form>
+  </div>
+</div>
+
 </body>
 </html>
-
-
-
